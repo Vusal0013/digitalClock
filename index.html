@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>newPag</title>
+        <style type="text/css" media="all">
+        .container{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .content{
+            text-align: center;
+        }
+        .clock > div{
+            display: inline-block;
+        }
+        .minute-container h2{
+            display: block;
+            width: 70px;
+            padding: 5px;
+            background-color: #999;
+            border-radius: 7px;
+        }
+        .prepand-container h2{
+            display: block;
+            width: 70px;
+            background-color: #dadada;
+            border-radius: 7px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        .prepand-container h2.hour24{
+            display: block;
+            width: 40px;
+            padding: 5px;
+            background-color: #999;
+            border-radius: 7px;
+            margin-right: -15px;
+        }
+        .prepand-container h2.hour24::after{
+            content: ":";
+        }
+
+        .container-range{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        </style>
+    </head>
+    <body>
+        <div class="container-range">
+            <label id="hour24" for="hours-witch">24 hours</label>
+            <input type="range" id="hour-switch" step="1" max="1">
+            <label id="hour12" for="hour-switch">12 hours</label>
+        </div>
+        <div class="container">
+            <div class="content">
+                <h1 class="month">
+                    <span id="monthDay">30</span> <span id="month">December</span>
+                    <span id="year">2222</span>
+                </h1>
+                <h2 class="toDay">Today is: <span id="day">Wednesday</span></h2>
+                <div class="clock">
+                    <div class="prepand-container">
+                        <h2>
+                        <span id="hours">11</span> 
+                        <span id="prep">AM</span> 
+                        </h2>
+                    </div>
+                    <div class="minute-container">
+                        <h2>
+                        <span id="minute">31</span>
+                        :
+                        <span id="second">38</span>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" charset="utf-8">
+        
+        let interval;
+        let hours24;
+
+        let hourSwitch12 = document.querySelector("#hour12");
+        let hourSwitch24 = document.querySelector("#hour24");
+        let hourSwitch = document.getElementById("hour-switch");
+
+        hourSwitch12.addEventListener('click', () => {
+            hourSwitch.value = 1;
+            hours24 = false;
+})
+        hourSwitch24.addEventListener('click', () => {
+            hourSwitch.value = 0;
+            hours24 = true;
+})
+
+
+        function updateClock12(){
+
+        
+        const date = new Date()
+        const getDay = date.getDate();
+        const getWeekDay = date.getDay();
+        const getMonth = date.getMonth();
+        const getYear = date.getFullYear();
+        
+        let getHour = date.getHours();
+        let getMin = date.getMinutes();
+        let getSec = date.getSeconds();
+        const getWeekDayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const getMonthName = ["January","February","March","April","May","June","July", "August","September","October","November","December"];
+        
+        let prepand = "";
+
+     
+        const clockDay = document.getElementById("monthDay")
+        const clockMonth = document.getElementById("month");
+        const clockYear = document.getElementById("year");
+        const clockWeekDay = document.getElementById("day")
+        const clockHours = document.getElementById("hours");
+        const clockPrepand = document.getElementById("prep")
+        const clockMinute = document.getElementById("minute");
+        const clockSecond = document.getElementById("second");
+        
+        const hourContainer = document.querySelector(".prepand-container h2");
+        if(hours24){
+            clockPrepand.style.display = "none"  
+            hourContainer.classList.add("hour24") 
+        } else {
+            clockPrepand.style.display = "inline-block"  
+            hourContainer.classList.remove("hour24")
+        }
+        if(!hours24){
+            if(getHour <= 12) {
+                prepand = "AM"
+                getHour = getHour;
+            } else {
+                prepand = "PM"
+                getHour = getHour - 12
+            }
+        }
+
+            if(getHour < 10){
+            getHour = "0" + getHour;
+            }  
+            if(getMin < 10){
+            getMin = "0" + getMin;
+            }  
+            if(getSec < 10){
+            getSec = "0" + getSec;
+            }  
+
+            clockDay.innerText = getDay;
+            clockMonth.innerText = getMonthName[getMonth];
+            clockYear.innerText = getYear;
+
+            clockWeekDay.innerText = getWeekDayNames[getWeekDay];
+            clockHours.innerText = getHour;
+            clockPrepand.innerText = prepand;
+            clockMinute.innerText = getMin;
+            clockSecond.innerText = getSec;
+        }
+       
+       
+        interval = setInterval(updateClock12, 1000);
+        </script>
+    </body>
+</html>
